@@ -2,26 +2,24 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>emstest</title>
     <script>
-        var wsOsc = {};
-        wsOsc.ws = new WebSocket('ws://' + url + ':'+wsport);
-        wsOsc.status = 0;       // 0: 送れる 1: 送れない
-        wsOsc.ws.onopen = function(){
-            wsOsc.status = 1;   // 送れる
-        };
-        wsOsc.ws.onclose = function(){
-            wsOsc.status = 0;   // 送れない
-        };
-        wsOsc.send = function(path,type,data){
-            var jsonobj = {"osc":"WsOscSend","path":path,"type":type,"data":data};
-            var json = JSON.stringify(jsonobj);
+        var sock = new WebSocket('ws://127.0.0.1:5001');
 
-            // 送れれば送る
-            if(wsOsc.status){
-                wsOsc.ws.send(json);
-            }
-        };
+        // 接続
+        sock.addEventListener('open',function(e){
+            console.log('Socket 接続成功');
+            sock.send('awake');
+        });
+
+        // サーバーからデータを受け取る
+        sock.addEventListener('message',function(e){
+            console.log(e.data);
+        });
     </script>
 </head>
 <body>
