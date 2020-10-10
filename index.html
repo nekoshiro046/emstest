@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>emstest</title>
+    <script>
+        var wsOsc = {};
+        wsOsc.ws = new WebSocket('ws://' + url + ':'+wsport);
+        wsOsc.status = 0;       // 0: 送れる 1: 送れない
+        wsOsc.ws.onopen = function(){
+            wsOsc.status = 1;   // 送れる
+        };
+        wsOsc.ws.onclose = function(){
+            wsOsc.status = 0;   // 送れない
+        };
+        wsOsc.send = function(path,type,data){
+            var jsonobj = {"osc":"WsOscSend","path":path,"type":type,"data":data};
+            var json = JSON.stringify(jsonobj);
+
+            // 送れれば送る
+            if(wsOsc.status){
+                wsOsc.ws.send(json);
+            }
+        };
+    </script>
+</head>
+<body>
+</body>
+</html> 
